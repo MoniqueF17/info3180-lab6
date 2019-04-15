@@ -1,4 +1,8 @@
 /* Add your Application JavaScript */
+
+/*global Vue*/
+/*global fetch*/
+
 Vue.component('app-header', {
     template: `
         <header>
@@ -35,9 +39,39 @@ Vue.component('app-footer', {
     data: function() {
         return {
             year: (new Date).getFullYear()
-        }
+        };
     }
-})
+});
+
+Vue.component('news-list', {
+    template: `
+        <div class="news">
+            <h2>News</h2>
+            <ul class="news__list">
+                <li class="news__item">News item 1</li>
+                <li class="news__item">News item 2</li>
+                <li class="news__item">News item 3</li>
+            </ul>
+        </div>
+    `,
+    created: function() {
+        let self = this;
+        
+        fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=?')
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data);
+                self.articles = data.articles;
+            });
+    },
+    data: function() {
+        return{
+            articles: []
+        };
+    }
+});
 
 
 let app = new Vue({
